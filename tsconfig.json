@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "types": ["vite/client"],
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.glsl"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
