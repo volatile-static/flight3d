@@ -21,7 +21,7 @@ export const scene = new THREE.Scene();
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(25, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(6, 2, 0);
+camera.position.set(-3, 3, -3);
 scene.add(camera);
 
 /**
