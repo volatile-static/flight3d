@@ -14,12 +14,12 @@ const dayTexture = textureLoader.load('earth/8k_earth_daymap.jpg');
 dayTexture.colorSpace = THREE.SRGBColorSpace;
 const nightTexture = textureLoader.load('earth/8k_earth_nightmap.jpg');
 nightTexture.colorSpace = THREE.SRGBColorSpace;
-const normalTexture = textureLoader.load('earth/8k_earth_normal_map.tif');
+// const normalTexture = textureLoader.load('earth/8k_earth_normal_map.tif');
 const bumpRoughnessCloudsTexture = textureLoader.load('earth/specularClouds.jpg');
 
 // Sun
 const sun = new THREE.DirectionalLight(0xffffff, 2);
-sun.position.set(0, 0, 3);
+sun.position.setFromSphericalCoords(1, THREE.MathUtils.degToRad(66.5), 0);
 const sunOrient = TSL.normalWorld.dot(TSL.normalize(sun.position)).toVar();
 
 // uniforms
