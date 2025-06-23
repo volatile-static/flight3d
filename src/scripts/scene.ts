@@ -1,63 +1,76 @@
 import * as THREE from 'three/webgpu';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-/**
- * Sizes
- */
-const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-  pixelRatio: Math.min(window.devicePixelRatio, 2),
-};
+export type AnimationCallback = (time: number) => void;
 
-/**
- * Base
- */
-// Scene
-export const scene = new THREE.Scene();
+export class SceneManager {
+  public readonly scene: THREE.Scene;
+  private camera: THREE.PerspectiveCamera;
+  private renderer: THREE.WebGPURenderer;
+  private controls: OrbitControls;
+  private animationCallbacks = new Set<AnimationCallback>();
 
-/**
- * Camera
- */
-// Base camera
-const camera = new THREE.PerspectiveCamera(25, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(-3, 3, -3);
-scene.add(camera);
+  constructor() {
+    // Scene
+    this.scene = new THREE.Scene();
 
-/**
- * Renderer
- */
-const renderer = new THREE.WebGPURenderer({ antialias: true });
-renderer.setPixelRatio(devicePixelRatio);
-renderer.setSize(sizes.width, sizes.height);
-renderer.setPixelRatio(sizes.pixelRatio);
-renderer.setClearColor('#000011');
-renderer.setAnimationLoop(function (time) {
-  // earth.rotation.y += clock.getDelta() * 0.1;
-  //   earth.rotation.y = time / 10000;
-  // Update controls
-  controls.update();
+    // Camera
+    this.camera = new THREE.PerspectiveCamera(25, this.width / this.height, 0.1, 100);
+    this.camera.position.set(-3, 3, -3);
+    this.scene.add(this.camera);
 
-  // Render
-  renderer.render(scene, camera);
-});
-document.body.appendChild(renderer.domElement);
+    // Renderer
+    this.renderer = new THREE.WebGPURenderer({ antialias: true });
+    this.renderer.setPixelRatio(this.pixelRatio);
+    this.renderer.setSize(this.width, this.height);
+    this.renderer.setClearColor('#000011');
+    document.body.appendChild(this.renderer.domElement);
 
-// Controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
+    // Controls
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
 
-window.addEventListener('resize', () => {
-  // Update sizes
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
-  sizes.pixelRatio = Math.min(window.devicePixelRatio, 2);
+    // Animation loop
+    this.renderer.setAnimationLoop(this.animate);
 
-  // Update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
+    // Resize handler
+    window.addEventListener('resize', this.handleResize);
+  }
 
-  // Update renderer
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(sizes.pixelRatio);
-});
+  private get width() {
+    return window.innerWidth;
+  }
+
+  private get height() {
+    return window.innerHeight;
+  }
+
+  private get pixelRatio() {
+    return Math.min(window.devicePixelRatio, 2);
+  }
+
+  private animate = (time: number) => {
+    this.controls.update();
+    // 调用所有注册的回调
+    for (const cb of this.animationCallbacks) {
+      cb(time);
+    }
+    this.renderer.render(this.scene, this.camera);
+  };
+
+  private handleResize = () => {
+    this.camera.aspect = this.width / this.height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(this.width, this.height);
+    this.renderer.setPixelRatio(this.pixelRatio);
+  };
+
+  public addAnimationCallback(cb: AnimationCallback) {
+    this.animationCallbacks.add(cb);
+  }
+
+  public removeAnimationCallback(cb: AnimationCallback) {
+    this.animationCallbacks.delete(cb);
+  }
+}
