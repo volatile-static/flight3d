@@ -31,4 +31,10 @@ sceneManager.addAnimationCallback(function (timestamp) {
   const localTimeStr = new Date(realtime).toLocaleString('en-US', {
     timeZone: localTimeZone,
   });
+  const [tabTimeZone, tabRealTime, tabGlobalTime] = ['timeZone', 'realTime', 'globalTime'].map(
+    id => document.getElementById(id) as HTMLTableCellElement,
+  );
+  tabTimeZone.innerText = 'UTC' + localTimeZone;
+  tabRealTime.innerText = localTimeStr;
+  tabGlobalTime.innerText = new Date(realtime).toISOString();
 });

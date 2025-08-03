@@ -27,3 +27,13 @@ body {
   white-space: nowrap;
   top: calc(50% - 20px);
 }
+
+#parameters {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+}
+#parameters td {
+  padding: 5px;
+}
