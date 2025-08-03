@@ -1,7 +1,12 @@
 import { SceneManager } from './scene.ts';
 import { Earth } from './earth.ts';
 import { drawFlight, updateFlightPosition } from './flight.ts';
-import { lonToTimeZone, vector3ToLon, getSunLongitudeAtTime } from './utils.ts';
+import {
+  lonToTimeZone,
+  vector3ToLon,
+  getSunLongitudeAtTime,
+  getSunLatitudeOnDate,
+} from './utils.ts';
 
 const DEPART_TIME = new Date('2025-08-16T17:00:00+08:00').getTime();
 const ARRIVE_TIME = new Date('2025-08-16T17:25:00-05:00').getTime();
@@ -18,7 +23,7 @@ sceneManager.addAnimationCallback(function (timestamp) {
   const realtime = DEPART_TIME + flightProgress;
 
   // 更新地球自转
-  earth.setSunPosition(0, getSunLongitudeAtTime(realtime));
+  earth.setSunPosition(getSunLatitudeOnDate(realtime), getSunLongitudeAtTime(realtime));
   // 更新航班位置
   const flightPos = updateFlightPosition(earth.earth, flightProgressRatio);
 

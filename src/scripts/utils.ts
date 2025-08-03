@@ -38,6 +38,19 @@ export function getSunLongitudeAtTime(timestamp: number): number {
   return (12 - utcHours) * 15;
 }
 
+// 计算指定日期的太阳直射点纬度
+export function getSunLatitudeOnDate(timestamp: number): number {
+  const date = new Date(timestamp);
+  const dayOfYear = Math.floor(
+    (timestamp - new Date(date.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  // 简化的太阳直射点纬度计算，假设夏至在6月21日（172天），冬至在12月21日（355天）
+  const declination = -23.44 * Math.cos(((dayOfYear + 10) / 365) * (2 * Math.PI));
+
+  return declination;
+}
+
 // 画一条纬线，默认赤道
 export function drawLatitudeCircle(
   lat: number = 0,
