@@ -16,7 +16,7 @@ export function latLonToVector3(lat: number, lon: number, radius: number = 1): T
 export function vector3ToLon(vec: THREE.Vector3): number {
   const spherical = new THREE.Spherical().setFromVector3(vec);
   const lon = THREE.MathUtils.radToDeg(spherical.theta) - 90; // 转换为经度
-  return lon < -180 ? lon + 360 : lon; // 确保经度在[-180, 180]范围内  
+  return lon < -180 ? lon + 360 : lon; // 确保经度在[-180, 180]范围内
 }
 
 // 经度转时区

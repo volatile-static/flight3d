@@ -13,8 +13,7 @@ export function drawFlight(earth: Mesh) {
 let flightMarker: Mesh | undefined;
 export function updateFlightPosition(earth: Mesh, progress: number) {
   const flightPos = getGeodesicPoint(depart, arrive, progress, 1.01);
-  if (flightMarker)
-    earth.remove(flightMarker);
+  if (flightMarker) earth.remove(flightMarker);
   flightMarker = drawMarkerPoint(flightPos, 'green');
   earth.add(flightMarker);
   return flightPos;

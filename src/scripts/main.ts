@@ -26,5 +26,4 @@ sceneManager.addAnimationCallback(function (timestamp) {
   const localTimeStr = new Date(realtime).toLocaleString('en-US', {
     timeZone: localTimeZone,
   });
-
 });
