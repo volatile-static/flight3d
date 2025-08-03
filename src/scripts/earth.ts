@@ -13,8 +13,19 @@ export class Earth {
   constructor(rotationAngle: number = 0, sunLatitude: number = 66.5, sunLongitude: number = 0) {
     // Loaders
     this.manager = new THREE.LoadingManager(undefined, (item, loaded, total) => {
-      // Update the progress bar in the GUI
-      // gui.add({ progress: `${Math.round((loaded / total) * 100)}%` }, 'progress').name(item);
+      console.log(`Loading ${item}: ${loaded}/${total}`);
+      const progressDiv = document.getElementById('loading'),
+        progressBar = progressDiv?.querySelector('progress'),
+        progressText = progressDiv?.querySelector('p');
+      if (progressBar) {
+        progressBar.value = loaded / total;
+      }
+      if (progressText) {
+        progressText.innerHTML = `Loading ${item}: ${loaded}/${total}`;
+      }
+      if (loaded === total) {
+        progressDiv?.classList.add('hidden');
+      }
     });
     this.textureLoader = new THREE.TextureLoader(this.manager);
 
