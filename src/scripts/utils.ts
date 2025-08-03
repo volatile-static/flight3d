@@ -12,6 +12,32 @@ export function latLonToVector3(lat: number, lon: number, radius: number = 1): T
   return new THREE.Vector3().setFromSpherical(latLonToSpherical(lat, lon, radius));
 }
 
+// 直角坐标转经度（度）
+export function vector3ToLon(vec: THREE.Vector3): number {
+  const spherical = new THREE.Spherical().setFromVector3(vec);
+  const lon = THREE.MathUtils.radToDeg(spherical.theta) - 90; // 转换为经度
+  return lon < -180 ? lon + 360 : lon; // 确保经度在[-180, 180]范围内  
+}
+
+// 经度转时区
+export function lonToTimeZone(lon: number): string {
+  if (lon < -180 || lon > 180)
+    throw new Error('Longitude must be in the range [-180, 180], got: ' + lon);
+  const timeZone = Math.round(lon / 15);
+  const paddedTimeZone = Math.abs(timeZone).toString().padStart(2, '0');
+  return (timeZone < 0 ? '-' : '+') + paddedTimeZone;
+}
+
+// 计算指定时刻的太阳直射点经度
+export function getSunLongitudeAtTime(timestamp: number): number {
+  // 地球自转：每小时15度，从本初子午线(0°)开始
+  // 世界时(UTC)12:00时，太阳直射点在经度0°左右
+  const utc = new Date(timestamp);
+  const utcHours = utc.getUTCHours() + utc.getUTCMinutes() / 60;
+  // 计算太阳直射点经度（15度/小时，UTC12点对应0°）
+  return (12 - utcHours) * 15;
+}
+
 // 画一条纬线，默认赤道
 export function drawLatitudeCircle(
   lat: number = 0,

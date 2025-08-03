@@ -98,7 +98,7 @@ export class Earth {
     this.sun.position.setFromSphericalCoords(
       1,
       THREE.MathUtils.degToRad(90 - latitude),
-      THREE.MathUtils.degToRad(longitude),
+      THREE.MathUtils.degToRad(longitude + 90),
     );
     // 更新太阳方向uniform的值
     this.sunDirectionUniform.value.copy(this.sun.position).normalize();
