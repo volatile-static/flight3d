@@ -54,7 +54,7 @@ export function drawMarkerPoint(pos: THREE.Vector3, color: THREE.ColorRepresenta
     new THREE.SphereGeometry(0.02, 16, 16),
     new THREE.MeshStandardMaterial({
       color,
-      emissive: 0xff0000,
+      emissive: color,
       emissiveIntensity: 2.5,
       metalness: 0.8,
       roughness: 0.3,
@@ -74,16 +74,33 @@ export function drawGeodesicLine(
   color: THREE.ColorRepresentation = 'red',
 ): THREE.Line {
   const segments = 256;
-  const arcPoints: THREE.Vector3[] = Array.from({ length: segments + 1 }, (_, i) => {
-    const axis = new THREE.Vector3().crossVectors(vStart, vEnd).normalize();
-    const angle = vStart.angleTo(vEnd); // 球面角度
-    // 用四元数插值
-    const q = new THREE.Quaternion().setFromAxisAngle(axis, (angle * i) / segments);
-    const p = vStart.clone().applyQuaternion(q).normalize().multiplyScalar(radius);
-    return p;
-  });
+  // 生成测地线上的所有点
+  const arcPoints = Array.from({ length: segments + 1 }, (_, i) =>
+    getGeodesicPoint(vStart, vEnd, i / segments, radius),
+  );
   return new THREE.Line(
     new THREE.BufferGeometry().setFromPoints(arcPoints),
     new THREE.LineBasicMaterial({ color }),
   );
+}
+
+/**
+ * 根据参数方程计算测地线上的点
+ * @param vStart 起点
+ * @param vEnd 终点
+ * @param t 参数∈[0, 1]，表示起点到终点的比例
+ * @param radius 半径
+ * @return 直角坐标
+ */
+export function getGeodesicPoint(
+  vStart: THREE.Vector3,
+  vEnd: THREE.Vector3,
+  t: number,
+  radius: number = 1,
+): THREE.Vector3 {
+  const [start, end] = [vStart, vEnd].map(v => v.clone().normalize());
+  const axis = new THREE.Vector3().crossVectors(start, end).normalize(); // 计算旋转轴
+  const angle = start.angleTo(end); // 球面角度
+  const q = new THREE.Quaternion().setFromAxisAngle(axis, angle * t); // 用四元数插值
+  return start.clone().applyQuaternion(q).normalize().multiplyScalar(radius);
 }
