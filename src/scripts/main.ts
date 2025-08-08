@@ -42,4 +42,7 @@ sceneManager.addAnimationCallback(function (timestamp) {
   tabOriginTime.innerText = new Date(realtime).toLocaleString('en-US', {
     timeZone: departZone,
   });
+
+  const progressBar = document.getElementById('progress') as HTMLProgressElement;
+  progressBar.value = flightProgressRatio;
 });
