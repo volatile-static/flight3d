@@ -37,3 +37,7 @@ body {
 #parameters td {
   padding: 5px;
 }
+#parameters td:first-child {
+  text-align: right;
+  font-weight: bold;
+}
