@@ -1,8 +1,8 @@
 import type { Mesh } from 'three';
 import { drawMarkerPoint, drawGeodesicLine, latLonToVector3, getGeodesicPoint } from './utils.ts';
 
-const depart = latLonToVector3(31, 121); // Shanghai PVG
-const arrive = latLonToVector3(33, -97); // Dallas DFW
+const depart = latLonToVector3(37.6, -122.4); // San Francisco SFO
+const arrive = latLonToVector3(25.1, 121.2); // Taipei Taoyuan TPE
 
 export function drawFlight(earth: Mesh) {
   earth.add(drawMarkerPoint(depart));
