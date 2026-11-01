@@ -35,6 +35,7 @@ export class Earth {
     const nightTexture = this.textureLoader.load('earth/8k_earth_nightmap.jpg');
     nightTexture.colorSpace = THREE.SRGBColorSpace;
     const bumpRoughnessCloudsTexture = this.textureLoader.load('earth/specularClouds.jpg');
+    const normalTexture = this.textureLoader.load('earth/4k_earth_normal_map.png'); // 切线空间法线贴图，保持线性色彩空间
 
     // Sun
     this.sun = new THREE.DirectionalLight(0xffffff, 2);
@@ -87,8 +88,8 @@ export class Earth {
     finalOutput = TSL.mix(finalOutput, atmosphereColor, atmosphereMix);
     this.globeMaterial.outputNode = TSL.vec4(finalOutput, TSL.output.a);
 
-    const bumpElevation = TSL.max(TSL.texture(bumpRoughnessCloudsTexture).r, cloudsStrength);
-    this.globeMaterial.normalNode = TSL.bumpMap(bumpElevation);
+    // 用真实地形法线贴图（specularClouds 的红通道是海陆掩码，不能当高度图）
+    this.globeMaterial.normalNode = TSL.normalMap(TSL.texture(normalTexture));
 
     /**
      * Earth
