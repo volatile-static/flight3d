@@ -8,9 +8,11 @@ import {
   getSunLatitudeOnDate,
 } from './utils.ts';
 
-// UA853 SFO -> TPE
-const DEPART_TIME = '2025-12-06T23:45:00-08:00';
-const ARRIVE_TIME = '2025-12-08T04:45:00+08:00';
+import { FLIGHT_NO, FLIGHT } from './flights.ts';
+
+const DEPART_TIME = FLIGHT.departTime;
+const ARRIVE_TIME = FLIGHT.arriveTime;
+document.title = `Flight ${FLIGHT_NO}`;
 
 const sceneManager = new SceneManager();
 const earth = new Earth();
